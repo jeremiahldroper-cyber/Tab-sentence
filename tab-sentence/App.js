@@ -738,7 +738,7 @@ const updateLoadedTab = useCallback(() => {
   const renderHeader = () => (
     <View style={s.header}>
       <View style={s.headerLeft}>
-        <Text style={s.headerTitle}>🐸 Tab Sentence</Text>
+        <Text style={s.headerTitle}> Tab Sentence</Text>
         <Text style={s.headerSub}>by Jeremiah Bullfrog</Text>
       </View>
       <TouchableOpacity onPress={() => setDarkMode(!isDark)} style={s.darkBtn}>
