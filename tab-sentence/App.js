@@ -13,12 +13,12 @@ import {
   Alert,
   Share,
   Linking,
-  SafeAreaView,
   Platform,
   useColorScheme,
   Dimensions,
   Image,
 } from "react-native";
+import { SafeAreaView, SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -1160,8 +1160,10 @@ const updateLoadedTab = useCallback(() => {
   );
 
   // ── Bottom Navigation ─────────────────────────────────────────────────────
-  const renderNav = () => (
-    <View style={[s.navBar, { backgroundColor: T.navBg, borderTopColor: T.border }]}>
+  const renderNav = () => {
+  const insets = useSafeAreaInsets();
+  return (
+    <View style={[s.navBar, { backgroundColor: T.navBg, borderTopColor: T.border, paddingBottom: insets.bottom || 8 }]}>
       {[
         { icon: "🎸", label: "Tab Studio",  idx: 0 },
         { icon: "📚", label: "My Library",  idx: 1 },
@@ -1176,10 +1178,12 @@ const updateLoadedTab = useCallback(() => {
       ))}
     </View>
   );
+};
 
   // ── Final render ──────────────────────────────────────────────────────────
   return (
-    <SafeAreaView style={[s.safe, { backgroundColor: T.bg }]}>
+  <SafeAreaProvider>
+    <SafeAreaView style={[s.safe, { backgroundColor: T.bg }]} edges={["top", "left", "right"]}>
       {renderHeader()}
       <View style={{ flex: 1 }}>
         {activeTab === 0 && renderStudio()}
@@ -1187,12 +1191,12 @@ const updateLoadedTab = useCallback(() => {
         {activeTab === 2 && renderGlossary()}
       </View>
       {renderNav()}
-
       {renderSaveModal()}
       {renderTuningModal()}
       {renderWrapModal()}
     </SafeAreaView>
-  );
+  </SafeAreaProvider>
+);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1402,11 +1406,10 @@ function makeStyles(T) {
 
     // Nav
     navBar: {
-      flexDirection: "row",
-      borderTopWidth: 1,
-      paddingBottom: Platform.OS === "ios" ? 12 : 4,
-      paddingTop: 6,
-    },
+  flexDirection: "row",
+  borderTopWidth: 1,
+  paddingTop: 6,
+},
     navItem:  { flex: 1, alignItems: "center", justifyContent: "center" },
     navIcon:  { fontSize: 20 },
     navLabel: { fontSize: 10, marginTop: 2, letterSpacing: 0.3 },
