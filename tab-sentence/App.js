@@ -18,7 +18,7 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import { SafeAreaView, SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -443,6 +443,7 @@ const GLOSSARY = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function App() {
+  const insets = useSafeAreaInsets();
   const systemScheme = useColorScheme();
   const [darkOverride, setDarkOverride] = useState(null);
   const isDark = darkOverride !== null ? darkOverride : systemScheme !== "light";
@@ -1160,42 +1161,38 @@ const updateLoadedTab = useCallback(() => {
   );
 
   // ── Bottom Navigation ─────────────────────────────────────────────────────
-  const renderNav = () => {
-  const insets = useSafeAreaInsets();
-  return (
-    <View style={[s.navBar, { backgroundColor: T.navBg, borderTopColor: T.border, paddingBottom: insets.bottom || 8 }]}>
-      {[
-        { icon: "🎸", label: "Tab Studio",  idx: 0 },
-        { icon: "📚", label: "My Library",  idx: 1 },
-        { icon: "📖", label: "Glossary",    idx: 2 },
-      ].map(({ icon, label, idx }) => (
-        <TouchableOpacity key={idx} style={s.navItem} onPress={() => setActiveTab(idx)}>
-          <Text style={[s.navIcon, { opacity: activeTab === idx ? 1 : 0.45 }]}>{icon}</Text>
-          <Text style={[s.navLabel, { color: activeTab === idx ? T.navActive : T.navInactive, fontWeight: activeTab === idx ? "700" : "400" }]}>
-            {label}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+  const renderNav = () => (
+  <View style={[s.navBar, { backgroundColor: T.navBg, borderTopColor: T.border, paddingBottom: insets.bottom || 8 }]}>
+    {[
+      { icon: "🎸", label: "Tab Studio", idx: 0 },
+      { icon: "📚", label: "My Library", idx: 1 },
+      { icon: "📖", label: "Glossary",   idx: 2 },
+    ].map(({ icon, label, idx }) => (
+      <TouchableOpacity key={idx} style={s.navItem} onPress={() => setActiveTab(idx)}>
+        <Text style={[s.navIcon, { opacity: activeTab === idx ? 1 : 0.45 }]}>{icon}</Text>
+        <Text style={[s.navLabel, { color: activeTab === idx ? T.navActive : T.navInactive, fontWeight: activeTab === idx ? "700" : "400" }]}>
+          {label}
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+);
 };
 
   // ── Final render ──────────────────────────────────────────────────────────
   return (
-  <SafeAreaProvider>
-    <SafeAreaView style={[s.safe, { backgroundColor: T.bg }]} edges={["top", "left", "right"]}>
-      {renderHeader()}
-      <View style={{ flex: 1 }}>
-        {activeTab === 0 && renderStudio()}
-        {activeTab === 1 && renderLibrary()}
-        {activeTab === 2 && renderGlossary()}
-      </View>
-      {renderNav()}
-      {renderSaveModal()}
-      {renderTuningModal()}
-      {renderWrapModal()}
-    </SafeAreaView>
-  </SafeAreaProvider>
+  <SafeAreaView style={[s.safe, { backgroundColor: T.bg }]} edges={["top", "left", "right"]}>
+    {renderHeader()}
+    <View style={{ flex: 1 }}>
+      {activeTab === 0 && renderStudio()}
+      {activeTab === 1 && renderLibrary()}
+      {activeTab === 2 && renderGlossary()}
+    </View>
+    {renderNav()}
+    {renderSaveModal()}
+    {renderTuningModal()}
+    {renderWrapModal()}
+  </SafeAreaView>
 );
 }
 
