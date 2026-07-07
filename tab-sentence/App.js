@@ -1177,7 +1177,6 @@ const updateLoadedTab = useCallback(() => {
     ))}
   </View>
 );
-};
 
   // ── Final render ──────────────────────────────────────────────────────────
   return (
