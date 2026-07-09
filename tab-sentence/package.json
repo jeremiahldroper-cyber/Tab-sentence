@@ -15,7 +15,8 @@
     "expo-clipboard": "~8.0.8",
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
-    "react-native-safe-area-context": "~4.8.2"
+    "react-native-safe-area-context": "~5.6.0",
+    "expo-font": "~13.0.4"
   },
   "private": true
 }
